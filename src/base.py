@@ -1,13 +1,5 @@
 from objects.Table import Table, Row
-
-
-def get_key_by_number(dict_keys, number):
-    d = 0
-    for k in dict_keys:
-        if d == number:
-            return k
-        d += 1
-    return None
+import re
 
 
 def get_rows_by_number(table: Table, start: int, stop: int = None, copy_table=False):
@@ -31,20 +23,37 @@ def get_rows_by_number(table: Table, start: int, stop: int = None, copy_table=Fa
 def get_rows_by_index(table: Table, *values, copy_table=False):
     if not isinstance(table, Table) or not isinstance(copy_table, bool):
         raise TypeError
-
-    if copy_table:
-        new_table = Table(*table.rows)
-    else:
-        new_table = table
-
-    del_indexes = []
-    fir_key = get_key_by_number(table.rows[0].keys(), 0)
+    new_table = Table()
+    fir_key = list(table.rows[0].keys())[0]
     for x in table.rows:
-        if x.get(fir_key) not in values:
-            del_indexes.append(x)
-    for i in del_indexes:
-        new_table.rows.remove(i)
+        if x.get(fir_key) in values:
+            new_table.rows.append(x)
+    if not copy_table:
+        table.rows = new_table.rows
     return new_table
+
+
+def get_column_types(table: Table, by_number=True):
+    if not isinstance(table, Table) or not isinstance(by_number, bool):
+        raise TypeError
+    ans = dict()
+    if table.is_empty():
+        return ans
+
+    cols = list(table.rows[0].keys())
+    for number, name in enumerate(cols):
+        dtype = str(type(table.rows[0].get(name)))
+        dtype = ''.join(re.findall(r"'([^']+)'", dtype))
+        if by_number:
+            ans[number] = dtype
+        else:
+            ans[name] = dtype
+    return ans
+
+
+# ЧТО БЛЯТЬ!?
+def set_column_types(table: Table, ):
+    pass
 
 
 def print_table(table: Table):
@@ -58,5 +67,6 @@ a = Table(
     Row(dict(name="Sosat", surname="Blta")),
     Row(dict(name="Sany", surname="Bsu")))
 
-get_rows_by_index(a, 'Slava', 'Sany', copy_table=True)
-print(a)
+get_rows_by_index(a, 'Slava', 'Sany', copy_table=False)
+l = get_column_types(a)
+print(l)
