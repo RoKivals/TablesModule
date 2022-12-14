@@ -78,33 +78,56 @@ def get_values(table: Table, column=0):
     if not isinstance(table, Table) or not isinstance(column, int | str):
         raise TypeError
     ans = []
+    if table.is_empty():
+        return ans
+
+    cols = list(table.rows[0].keys())
     if isinstance(column, int):
-        pass
+        if column < 0 or column >= len(cols):
+            raise RuntimeError("Not found column")
+    if isinstance(column, str):
+        if column not in cols:
+            raise RuntimeError("Not found column")
+
+    for j in table.rows:
+        if isinstance(column, int):
+            ans.append(j[cols[column]])
+        elif isinstance(column, str):
+            ans.append(j[column])
     return ans
 
 
-'''
-get_values(column=0) – получение списĸа значений
-(типизированных согласно типу столбца) таблицы из столбца либо
-по номеру столбца (целое число, значение по умолчанию 0, либо
-по имени столбца).
-'''
+def get_value(table: Table, column=0):
+    ans = get_values(table, column)[0]
+    return ans
+
+
+def set_values(table: Table, values, column=0):
+    if not isinstance(table, Table) or not isinstance(column, int | str):
+        raise TypeError
+    if table.is_empty():
+        raise RuntimeError("Table is empty")
+
+    cols = list(table.rows[0].keys())
+    if isinstance(column, int):
+        if column < 0 or column >= len(cols):
+            raise RuntimeError("Not found column")
+    if isinstance(column, str):
+        if column not in cols:
+            raise RuntimeError("Not found column")
+
+    for i, j in zip(table.rows, values):
+        if isinstance(column, int):
+            i[cols[column]] = j
+        elif isinstance(column, str):
+            i[column] = j
+
+
+def set_value(table: Table, value, column=0):
+    set_values(table, [value], column)
 
 
 def print_table(table: Table):
     if not isinstance(table, Table):
         raise TypeError
     print(table)
-
-
-a = Table(
-    Row(dict(name="Slava", surname='Elan')),
-    Row(dict(name="Sosat", surname="Blta")),
-    Row(dict(name="Sany", surname="Bsu")))
-
-print(a)
-print('\n\n')
-
-b = get_rows_by_index(a, 'Slava', 'Sany', copy_table=True)
-set_column_types(a, types_dict={0: 'str', 1: 'bool'})
-print(a)
