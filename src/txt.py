@@ -25,8 +25,8 @@ def save_table(table, filename):
     if not isinstance(table, Table):
         raise TypeError
     if table.is_empty():
-        open(filename, 'w+')
-        return
+        with open(filename, 'w') as f:
+            return
     with open(filename, 'w+') as file:
         template = "{:{align}{width}}|"
         for k in table.rows[0].keys():

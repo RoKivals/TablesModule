@@ -2,34 +2,42 @@ import unittest
 from objects.Table import Table
 from objects.Row import Row
 import csv_loader as cs
-
-
-# def test2():
-#     a = Table(
-#         Row(dict(name='Slava', surname='Elan')),
-#         Row(dict(name="Sosat", surname="Blta")))
-#
-#     save_table(a, "a.pickle")
-#
-#     b = load_table("a.pickle")
-#     for row in b.rows:
-#         print(row)
-
-# a = Table(
-#     Row(dict(name='Slava', surname='Elan')),
-#     Row(dict(name="Sosat", surname="Blta")))
-# save_table(a, "bla.txt")
-# b = load_table("bla.txt")
+import pickle_loader as pck
+import txt
 
 
 class MyTestCase(unittest.TestCase):
-    def test_something(self):
+    def testcsv(self):
         a = Table(
-            Row(dict(name='Slava', surname='Elan')),
-            Row(dict(name="Sosat", surname="Blta")))
-        cs.save_table(a, "bla.csv")
-        b = cs.load_table("bla.csv")
-        self.assertEqual(a.rows, b.rows)  # add assertion here
+            Row(dict(name='Slava', surname='Orus', town='MSC')),
+            Row(dict(name="Veronika", surname="Boiko", town='Tver')),
+        )
+        cs.save_table(a, "first.csv")
+        b = cs.load_table("first.csv")
+        self.assertEqual(a.rows, b.rows)
+        # add assertion here
+
+    def testpickle(self):
+        a = Table(
+            Row(dict(name='Slava', surname='Orus', town='MSC')),
+            Row(dict(name="Veronika", surname="Boiko", town='Tver')),
+        )
+        pck.save_table(a, "file.pickle")
+        b = pck.load_table("first.pickle")
+        self.assertEqual(a.rows, b.rows)
+
+    def testtxt(self):
+        a = Table(
+            Row(dict(name='Slava', surname='Orus', town='MSC')),
+            Row(dict(name="Veronika", surname="Boiko", town='Tver')),
+        )
+        txt.save_table(a, "first.txt")
+        b = txt.load_table("first.txt")
+        c = Table()
+        txt.save_table(c, 'empty.txt')
+        f = txt.load_table('empty.txt')
+        self.assertEqual(a.rows, b.rows)
+        self.assertEqual(c.rows, f.rows)
 
 
 if __name__ == '__main__':

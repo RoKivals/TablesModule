@@ -15,7 +15,7 @@ def save_table(table, filename):
     if not isinstance(table, Table):
         raise TypeError
     if table.is_empty():
-        open(filename, 'wb')
-        return
+        with open(filename, 'wb') as _:
+            return
     with open(filename, 'wb') as pickle_file:
         pickle.dump(table, pickle_file)

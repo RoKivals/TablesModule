@@ -19,8 +19,8 @@ def save_table(table, filename):
     if not isinstance(table, Table):
         raise TypeError
     if table.is_empty():
-        open(filename, 'w+', encoding='utf-8', newline='')
-        return
+        with open(filename) as _:
+            return
     fieldnames = list(table.rows[0].keys())
     with open(filename, 'w+', encoding='utf-8', newline='') as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
