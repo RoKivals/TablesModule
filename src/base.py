@@ -8,7 +8,7 @@ def get_rows_by_number(table: Table, start: int, stop: int = None, copy_table=Fa
     if not isinstance(table, Table) or not isinstance(copy_table, bool):
         raise TypeError
     if start < 0 or stop >= len(table.rows):
-        raise ValueError
+        raise RuntimeError
 
     if copy_table:
         new_table = deepcopy(table)
@@ -29,7 +29,7 @@ def get_rows_by_index(table: Table, *values, copy_table=False):
     fir_key = list(table.rows[0].keys())[0]
     for x in table.rows:
         if x.get(fir_key) in values:
-            if not copy_table:
+            if copy_table:
                 x = deepcopy(x)
             new_table.rows.append(x)
     return new_table
