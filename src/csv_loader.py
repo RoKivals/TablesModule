@@ -1,6 +1,6 @@
 import csv
 
-from objects.Table import Table, Row
+from src.objects.Table import Table, Row
 
 
 def load_table(filename):
@@ -18,8 +18,10 @@ def load_table(filename):
 def save_table(table, filename):
     if not isinstance(table, Table):
         raise TypeError
+    if not filename.endswith('.csv'):
+        raise RuntimeError('Bad format')
     if table.is_empty():
-        with open(filename) as _:
+        with open(filename, mode='w+') as _:
             return
     fieldnames = list(table.rows[0].keys())
     with open(filename, 'w+', encoding='utf-8', newline='') as f:

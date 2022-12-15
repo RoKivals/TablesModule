@@ -1,6 +1,6 @@
 import pickle
 
-from objects.Table import Table
+from src.objects.Table import Table
 
 
 def load_table(filename):
@@ -14,6 +14,8 @@ def load_table(filename):
 def save_table(table, filename):
     if not isinstance(table, Table):
         raise TypeError
+    if not filename.endswith('.pickle'):
+        raise RuntimeError('Bad format')
     if table.is_empty():
         with open(filename, 'wb') as _:
             return

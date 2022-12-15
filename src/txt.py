@@ -1,4 +1,4 @@
-from objects.Table import Table, Row
+from src.objects.Table import Table, Row
 
 
 def parse_arr(array: list):
@@ -24,14 +24,16 @@ def load_table(filename):
 def save_table(table, filename):
     if not isinstance(table, Table):
         raise TypeError
+    if not filename.endswith('.txt'):
+        raise RuntimeError('Bad format')
     if table.is_empty():
-        with open(filename, 'w') as f:
+        with open(filename, 'w') as _:
             return
     with open(filename, 'w+') as file:
         template = "{:{align}{width}}|"
         for k in table.rows[0].keys():
-            file.write(template.format(k, align='^', width='15'))
+            file.write(template.format(k, align='^', width='25'))
         for j in table.rows:
             file.write('\n')
             for i in j.keys():
-                file.write(template.format(j[i], align='^', width='15'))
+                file.write(template.format(j[i], align='^', width='25'))

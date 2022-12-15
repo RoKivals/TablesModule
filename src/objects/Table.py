@@ -1,4 +1,4 @@
-from objects.Row import Row
+from src.objects.Row import Row
 
 
 class Table:
@@ -11,11 +11,11 @@ class Table:
             return ans
         template = "{:{align}{width}}|"
         for k in self._rows[0].keys():
-            ans += template.format(k, align='^', width='15')
+            ans += template.format(k, align='^', width='25')
         for j in self._rows:
             ans += '\n'
             for i in j.keys():
-                ans += template.format(j[i], align='^', width='15')
+                ans += template.format(j[i], align='^', width='25')
         return ans
 
     @property

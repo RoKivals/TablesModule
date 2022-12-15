@@ -1,4 +1,4 @@
-from objects.Table import Table, Row
+from src.objects.Table import Table, Row
 import re
 from copy import deepcopy
 from pydoc import locate
@@ -9,17 +9,19 @@ def get_rows_by_number(table: Table, start: int, stop: int = None, copy_table=Fa
         raise TypeError
     if start < 0 or stop >= len(table.rows):
         raise RuntimeError
-
-    if copy_table:
-        new_table = deepcopy(table)
-    else:
-        new_table = Table(table.rows)
+    new_table = Table()
 
     if stop is None:
-        new_table.rows = table.rows[start]
+        if copy_table:
+            new_table.rows = deepcopy(table.rows[start])
+        else:
+            new_table.rows = table.rows[start]
     else:
-        new_table.rows = table.rows[start:stop]
-    return new_table
+        if copy_table:
+            new_table.rows = deepcopy(table.rows[start:stop])
+        else:
+            new_table.rows = table.rows[start:stop]
+        return new_table
 
 
 def get_rows_by_index(table: Table, *values, copy_table=False):
